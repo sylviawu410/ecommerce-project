@@ -7,15 +7,141 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+nav {
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+nav:hover form {
+  display: flex;
+}
+
+nav .icon {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding-left: 40px;
+
+}
+
+nav .shopping-cart {
+  padding-right: 40px;
+}
+
+nav .shop-item {
+  height: 50px;
+}
+
+nav form {
+  display: none;
+  justify-content: space-around;
+  align-items: center;
+}
+
+nav .row {
+  display: flex;
+  align-items: center;
+}
+
+nav .shop-item-name {
+  padding-left: 10px;
+}
+
+.main-page .info {
+  display: flex;
+  height: 64px;
+  padding: 8px 24px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-page .display {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+
+}
+
+.product-card {
+  min-width: 305px;
+  margin-top: 10px;
+}
+
+.product-card-img {
+  width: 305px;
+  height: 375px;
+}
+
+.product-card .title {
+  padding-top: 10px;
+}
+
+.product-card .price {
+  padding-top: 3px;
+}
+
+.product-card .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-page .container {
+  display: flex;
+  gap: 100px;
+  align-items: center;
+}
+
+.product-page .container img {
+  max-height: 759px;
+}
+
+.product-page .text {
+  padding: 40px;
+
+}
+
+.product-page h1 {
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.product-page h2 {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding-top: 13px;
+}
+
+.product-page h4 {
+  font-size: 16px;
+  padding-top: 54px;
+  padding-bottom: 20px;
+}
+
+.product-page .row {
+  display: flex;
+  justify-content: space-between;
 }

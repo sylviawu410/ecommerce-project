@@ -29,10 +29,6 @@ nav {
   flex-wrap: wrap;
 }
 
-nav:hover form {
-  display: flex;
-}
-
 nav .icon {
   font-size: 24px;
   font-style: normal;
@@ -42,28 +38,19 @@ nav .icon {
 
 }
 
-nav .shopping-cart {
-  padding-right: 40px;
-}
+
 
 nav .shop-item {
   height: 50px;
 }
 
-nav form {
-  display: none;
-  justify-content: space-around;
-  align-items: center;
-}
 
 nav .row {
   display: flex;
   align-items: center;
 }
 
-nav .shop-item-name {
-  padding-left: 10px;
-}
+
 
 .main-page .info {
   display: flex;

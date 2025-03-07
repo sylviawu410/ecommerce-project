@@ -5,7 +5,7 @@ import Navbar from '../../components/Navbar.js'
 
 export default function Page() {
   let { id } = useParams();
-  console.log(id)
+  // console.log(id)
   const searchParams = useSearchParams();
   const title = searchParams.get('title');
   const imageUrl = searchParams.get('imageUrl');

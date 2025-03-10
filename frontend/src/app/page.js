@@ -2,6 +2,12 @@ import ProductCard from './components/ProductCard.js';
 import Navbar from './components/Navbar.js';
 
 export default function Home() {
+  const products = [
+    { pid: 1, name: "The Dandy Chair", price: 640, imageUrl:"furniture1.png" },
+    { pid: 2, name: "Rustic Vase Set", price: 206, imageUrl:"furniture2.png" },
+    { pid: 3, name: "The Silky Vase", price: 390, imageUrl:"furniture3.png" },
+    { pid: 4, name: "The Lucy Lamp", price: 492, imageUrl:"furniture4.png" }
+  ];
   return (
     <div className="main-page min-h-screen font-[family-name:var(--font-geist-sans)]">
       <Navbar></Navbar>
@@ -44,10 +50,7 @@ export default function Home() {
       </section>
       <main>
         <div className='display'>
-          <ProductCard title="The Dandy chair" imageUrl="furniture1.png" price='$650' ></ProductCard>
-          <ProductCard title="Rustic Vase Set" imageUrl="furniture2.png" price='$375' ></ProductCard>
-          <ProductCard title="The Silky Vase" imageUrl="furniture3.png" price='$296' ></ProductCard>
-          <ProductCard title="The Lucy Lamp" imageUrl="furniture4.png" price='$385' ></ProductCard>
+          {products.map((product)=>(<ProductCard key={product.pid} title={product.name} price={product.price} imageUrl={product.imageUrl}></ProductCard>))}
         </div>
 
 

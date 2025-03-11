@@ -50,10 +50,8 @@ export default function Home() {
       </section>
       <main>
         <div className='display'>
-          {products.map((product)=>(<ProductCard key={product.pid} title={product.name} price={product.price} imageUrl={product.imageUrl}></ProductCard>))}
+          {products.map((product)=>(<ProductCard key={product.pid} productId={product.pid} title={product.name} price={product.price} imageUrl={product.imageUrl}></ProductCard>))}
         </div>
-
-
       </main>
       <footer className="row-start-3 flex flex-wrap pt-20 items-center justify-center">
         <div>made by Sylvia Wu, 1155177379</div>

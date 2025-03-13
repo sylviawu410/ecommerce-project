@@ -13,7 +13,7 @@ const Navbar = () => {
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(storedCart);
-    console.log("storedCart:", storedCart)
+    // console.log("storedCart:", storedCart)
   }, []);
 
   // Listen for storage updates (e.g., from ProductCard)
@@ -34,7 +34,7 @@ const Navbar = () => {
 
       for (const item of cart) {
         // Simulate AJAX call to get product details
-        const response = await fetch(`/api/products/${item.pid}`);
+        const response = await fetch(`/api/products/${item.pid}`); 
         if (!response.ok) {
           console.error("Failed to fetch product details for pid:", item.pid);
           continue;
@@ -87,9 +87,9 @@ const Navbar = () => {
             <img className="shopping-cart" src="/shopping-cart.svg" alt='' />
           </button>
           {((isHovered || isClicked)) && (
-            <form className="bg-white absolute right-0 z-10 p-3 w-[500px] origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden">
+            <form className="bg-white absolute right-0 z-10 p-4 w-[500px] origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden">
               <div>
-                <div className="mt-4">
+                <div className="mt-1">
                   {cart.length === 0 ? (
                     <p>Your cart is empty</p>
                   ) : (
@@ -108,7 +108,7 @@ const Navbar = () => {
                           />
                           <button
                             onClick={() => removeItem(item.pid)}
-                            className="bg-indigo-900 text-white px-2 py-1 rounded"
+                            className="bg-indigo-900 text-white px-2 py-1 rounded text-xs font-medium"
                           >
                             remove
                           </button>
@@ -116,11 +116,11 @@ const Navbar = () => {
                       ))}
                     </ul>
                   )}
-                  <div className="mt-4">
+                  <div className="my-4">
                     <strong>Total: ${total}</strong>
                   </div>
                   <div className="text-right">
-                    <button className="inline-flex bg-black px-3 py-3 text-sm text-white shadow-xs ring-stone-300 ring-inset hover:text-black hover:bg-gray-50">Checkout</button>
+                    <button className="inline-flex bg-black px-3 py-3 text-sm text-white shadow-xs ring-stone-300 ring-inset hover:text-black hover:bg-gray-50 font-medium">Checkout</button>
                   </div>
                 </div>
               </div>

@@ -10,7 +10,7 @@ const products = [
 
 // Handle GET requests
 export async function GET(request, { params }) {
-  const { product: pid } = params; // Access the dynamic 'product' parameter
+  const { product: pid } = await params; 
 
   const product = products.find((p) => p.pid === parseInt(pid));
   if (product) {

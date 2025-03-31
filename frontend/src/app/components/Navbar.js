@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from 'next/link';
 
 const Navbar = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -34,7 +35,7 @@ const Navbar = () => {
 
       for (const item of cart) {
         // Simulate AJAX call to get product details
-        const response = await fetch(`/api/products/${item.pid}`); 
+        const response = await fetch(`/api/products/${item.pid}`);
         if (!response.ok) {
           console.error("Failed to fetch product details for pid:", item.pid);
           continue;
@@ -71,7 +72,14 @@ const Navbar = () => {
   };
   return (
     <nav className="w-full navbar">
-      <div className="icon w-3/10">IERG4210</div>
+      <Link href='/'>
+        <div className="icon w-3/10">IERG4210</div>
+      </Link>
+
+      <Link href="/admin" className="ml-auto mr-3">
+        <div >Admin</div>
+      </Link>
+
       <div className="relative inline-block mr-5 w-6/10">
         <div>
           <button

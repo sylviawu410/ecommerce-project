@@ -11,7 +11,7 @@ export default function Page() {
   const imageUrl = searchParams.get('imageUrl');
   const imageUrlString = "../" + imageUrl;
   const price = searchParams.get('price');
-
+  console.log("imageUrlString:", imageUrlString)
   return (
     <div className='product-page'>
       <Navbar></Navbar>

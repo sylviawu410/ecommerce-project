@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="main-page min-h-screen font-[family-name:var(--font-geist-sans)]">
       <Navbar></Navbar>
-      <img src="background.png" className="w-full" alt='/' />
+      <img src="./background.png" className="w-full" alt='background' />
       <section className="info">
         <div className="breadcrumb flex" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">

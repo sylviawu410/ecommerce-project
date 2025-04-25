@@ -10,7 +10,7 @@ const AdminPage = () => {
             <Navbar></Navbar>
             <main className='flex flex-col'>
                 <div className='text-4xl mt-7 mx-auto font-semibold'>Admin Panel</div>
-                <div className=' font-medium text-lg bg-indigo-900 text-white w-full py-8 mt-12 pl-5 '>MANAGE PRODUCTS</div>
+                <div className=' font-medium text-lg bg-indigo-900 text-white w-full py-12 pl-8 mt-12 ml-5 '>MANAGE PRODUCTS</div>
 
                 <form className='flex flex-col'>
                     <div className='flex flex-col my-10'>
@@ -151,7 +151,7 @@ const AdminPage = () => {
 
                     </div>
                 </form>
-                <div className=' font-medium text-lg bg-indigo-900 text-white w-full py-8 mt-12 pl-5 '>MANAGE CATEGORIES</div>
+                <div className=' font-medium text-lg bg-indigo-900 text-white w-full py-12 pl-8 mt-12 ml-5'>MANAGE CATEGORIES</div>
 
                 <form className='flex flex-col'>
                     <div className='flex flex-col my-10'>

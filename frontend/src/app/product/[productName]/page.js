@@ -1,22 +1,45 @@
 "use client";
 
-import { useSearchParams,useParams } from 'next/navigation'
+import { useSearchParams, useParams } from 'next/navigation'
 import Navbar from '../../components/Navbar.js'
+import { useEffect, useState } from 'react';
+
+export async function fetchProducts() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
+  if (!res.ok) throw new Error('Failed to fetch products');
+  return res.json();
+}
 
 export default function Page() {
   let { id } = useParams();
-  // console.log(id)
   const searchParams = useSearchParams();
-  const title = searchParams.get('title');
+  const [products, setProducts] = useState([]);
+
+  console.log("id: ",id)
   const imageUrl = searchParams.get('imageUrl');
   const imageUrlString = "../" + imageUrl;
-  const price = searchParams.get('price');
-  console.log("imageUrlString:", imageUrlString)
+
+  useEffect(() => {
+    async function loadProducts(){
+      try {
+        const data = await fetchProducts();
+        setProducts(data); 
+        // console.log("product data: ", data)
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+        setError(err.message); // Handle errors
+      }
+    }
+
+    loadProducts();
+  }, []);
+
+
   return (
     <div className='product-page'>
       <Navbar></Navbar>
       <main>
-        
+
         <div className='container'>
           <img src={imageUrlString} />
           <div className="text">

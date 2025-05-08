@@ -3,12 +3,20 @@
 import React, { useState, useEffect } from "react";
 import Link from 'next/link';
 
+export async function fetchProducts() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
+  if (!res.ok) throw new Error('Failed to fetch products');
+  return res.json();
+}
+
 const Navbar = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [error, setError] = useState(null);
 
   // Fetch cart from localStorage when the component mounts
   useEffect(() => {
@@ -17,7 +25,6 @@ const Navbar = () => {
     // console.log("storedCart:", storedCart)
   }, []);
 
-  // Listen for storage updates (e.g., from ProductCard)
   useEffect(() => {
     const onStorageUpdate = () => {
       const updatedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -28,31 +35,35 @@ const Navbar = () => {
     return () => window.removeEventListener("storage", onStorageUpdate);
   }, []);
 
+  useEffect(() => {
+    async function loadProducts(){
+      try {
+        const data = await fetchProducts();
+        setProducts(data); 
+        // console.log("product data: ", data)
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+        setError(err.message); 
+      }
+    }
+    loadProducts();
+  }, []);
+
   // Calculate total amount
   useEffect(() => {
     const calculateTotal = async () => {
       let totalAmount = 0;
-
       for (const item of cart) {
-        // Simulate AJAX call to get product details
-        const response = await fetch(`/api/products/${item.pid}`);
-        if (!response.ok) {
-          console.error("Failed to fetch product details for pid:", item.pid);
-          continue;
-        }
-        const product = await response.json();
-        totalAmount += product.price * item.quantity;
+        totalAmount += item.price * item.quantity;
       }
-
       setTotal(totalAmount);
     };
-
     if (cart.length > 0) {
       calculateTotal();
     } else {
       setTotal(0);
     }
-  }, [cart]);
+  }, [cart, products]);
 
   // Update quantity
   const updateQuantity = (pid, quantity) => {
@@ -104,7 +115,7 @@ const Navbar = () => {
                     <ul>
                       {cart.map((item) => (
                         <li key={item.pid} className="flex items-center gap-5 mb-2">
-                          <img className="shop-item" src={item.imageUrl} alt='' />
+                          <img className="shop-item" src={item.image_url} alt='' />
                           <div className=" w-7/10 grow">{item.name}</div>
                           <div>${item.price}</div>
                           <input

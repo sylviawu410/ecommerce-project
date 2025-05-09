@@ -3,10 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   try {
-    // Get the product ID (pid) from the dynamic route
-    const { pid } = params;
-
-    // Query the database for the product with the specified ID
+    const { pid } = await params;
     const [product] = await pool.query('SELECT * FROM products WHERE pid = ?', [pid]);
     // const [product] = await pool.query('SELECT * FROM products WHERE pid = ? LIMIT 1', [pid]);
 

@@ -1,47 +1,46 @@
 "use client";
 
-import { useSearchParams, useParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Navbar from '../../components/Navbar.js'
 import { useEffect, useState } from 'react';
 
-export async function fetchProducts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
-  if (!res.ok) throw new Error('Failed to fetch products');
+export async function fetchProductById(pid) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${pid}`);
+  if (!res.ok) throw new Error(`Failed to fetch product with ID ${pid}`);
   return res.json();
 }
 
 export default function Page() {
-  let { id } = useParams();
-  const searchParams = useSearchParams();
-  const [products, setProducts] = useState([]);
-
-  console.log("id: ",id)
-  const imageUrl = searchParams.get('imageUrl');
-  const imageUrlString = "../" + imageUrl;
+  const { pid } = useParams();
+  const [product, setProduct] = useState({});
 
   useEffect(() => {
-    async function loadProducts(){
+    async function loadProduct() {
+      if (!pid) {
+        console.error("no product id provided");
+        return;
+      }
       try {
-        const data = await fetchProducts();
-        setProducts(data); 
-        // console.log("product data: ", data)
+        const data = await fetchProductById(pid);
+        setProduct(data);
       } catch (err) {
         console.error('Error fetching categories:', err);
-        setError(err.message); // Handle errors
       }
     }
 
-    loadProducts();
-  }, []);
-
+    loadProduct();
+  }, [pid]);
 
   return (
     <div className='product-page'>
       <Navbar></Navbar>
       <main>
-
         <div className='container'>
-          <img src={imageUrlString} />
+          <img
+            src={product.image_url ? `/${product.image_url}` : "/placeholder.jpg"}
+            alt={product.name || "Product image"}
+            onError={(e) => (e.target.src = "/placeholder.jpg")} 
+          />
           <div className="text">
             <div className="breadcrumb flex pb-5" aria-label="Breadcrumb">
               <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -60,10 +59,10 @@ export default function Page() {
                 </li>
               </ol>
             </div>
-            <h1>{title}</h1>
-            <h2>{price}</h2>
+            <h1>{product.name}</h1>
+            <h2>${product.price}</h2>
             <h4>Description</h4>
-            <p>A timeless design, with premium materials features as one of our most popular and iconic pieces. The dandy chair is perfect for any stylish living space with beech legs and lambskin leather upholstery.</p>
+            <p>{product.description}</p>
             <p className='pt-4'>- Premium material</p>
             <p>- Handmade upholstery</p>
             <p>- Quality timeless classic</p>
@@ -76,7 +75,7 @@ export default function Page() {
         </div>
       </main>
       <footer className="row-start-3 flex flex-wrap pt-20 items-center justify-center">
-        <div>made by Sylvia Wu, 1155177379</div>
+        <div>Wu Mei Yin 1155177379</div>
       </footer>
 
     </div>

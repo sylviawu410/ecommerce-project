@@ -103,7 +103,7 @@ const Navbar = () => {
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => setIsClicked(!isClicked)}
           >
-            <img className="shopping-cart" src="/shopping-cart.svg" alt='' />
+            <img className="shopping-cart" src="/shopping-cart.svg" alt='shopping cart image' />
           </button>
           {((isHovered || isClicked)) && (
             <form className="bg-white absolute right-0 z-10 p-4 w-[500px] origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden">
@@ -115,7 +115,7 @@ const Navbar = () => {
                     <ul>
                       {cart.map((item) => (
                         <li key={item.pid} className="flex items-center gap-5 mb-2">
-                          <img className="shop-item" src={item.image_url} alt='' />
+                          <img className="shop-item" src={`/${item.image_url}`} alt='' /> 
                           <div className=" w-7/10 grow">{item.name}</div>
                           <div>${item.price}</div>
                           <input

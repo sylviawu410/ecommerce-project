@@ -8,7 +8,7 @@ const geistSans = Montserrat({
 
 export const metadata = {
   title: "IERG4210 project",
-  description: "created by Sylvia",
+  description: "WU Mei Yin, 1155177379",
 };
 
 export default function RootLayout({ children }) {

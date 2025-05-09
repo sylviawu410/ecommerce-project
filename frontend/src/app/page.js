@@ -15,7 +15,7 @@ export async function fetchProducts() {
   return res.json();
 }
 
-export default function Home() {
+export default function HomePage() {
 
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -26,22 +26,22 @@ export default function Home() {
     async function loadCategories() {
       try {
         const data = await fetchCategories();
-        setCategories(data); // Store fetched categories in state
+        setCategories(data); 
         // console.log("categories data: ", data)
       } catch (err) {
         console.error('Error fetching categories:', err);
-        setError(err.message); // Handle errors
+        setError(err.message);
       }
     }
 
     async function loadProducts(){
       try {
         const data = await fetchProducts();
-        setProducts(data); // Store fetched categories in state
-        // console.log("product data: ", data)
+        setProducts(data);
+        console.log("product data: ", data)
       } catch (err) {
         console.error('Error fetching categories:', err);
-        setError(err.message); // Handle errors
+        setError(err.message); 
       }
     }
 
@@ -109,7 +109,7 @@ export default function Home() {
         </div>
       </main>
       <footer className="row-start-3 flex flex-wrap pt-20 items-center justify-center">
-        <div>made by Sylvia Wu, 1155177379</div>
+        <div>WU Mei Yin 1155177379</div>
       </footer>
     </div>
   );

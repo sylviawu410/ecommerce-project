@@ -26,7 +26,8 @@ const ProductCard = ({ productId, imageUrl, title, price }) => {
         pathname: `/product/${encodeURIComponent(productId)}`,
       }}>
         <div >
-          <img src={imageUrl} className="product-card-img" />
+          <img src={imageUrl ? imageUrl :"/placeholder.jpg"} className="product-card-img" />
+
         </div>
         <p className="title ">{title}</p>
       </Link>

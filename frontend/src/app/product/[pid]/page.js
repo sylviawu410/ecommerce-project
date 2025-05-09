@@ -10,7 +10,7 @@ export async function fetchProductById(pid) {
   return res.json();
 }
 
-export default function Page() {
+export default function DetailPage() {
   const { pid } = useParams();
   const [product, setProduct] = useState({});
 

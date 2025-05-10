@@ -24,3 +24,36 @@ export async function GET(request, { params }) {
     );
   }
 }
+export async function DELETE(request, { params }) {
+  const { pid } = params; 
+
+  if (!pid) {
+    return NextResponse.json(
+      { error: "Product ID is required" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const query = `DELETE FROM products WHERE pid = ?`;
+    const [result] = await pool.query(query, [pid]);
+
+    if (result.affectedRows === 0) {
+      return NextResponse.json(
+        { error: "Product not found or already deleted" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Product deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    return NextResponse.json(
+      { error: "An error occurred while deleting the product" },
+      { status: 500 }
+    );
+  }
+}

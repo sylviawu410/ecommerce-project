@@ -11,6 +11,7 @@ export async function fetchProducts() {
 
 const Navbar = () => {
   const [userType, setUserType] = useState('Guest');
+  const [isAdmin, setIsAdmin] = useState(false); 
 
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
@@ -34,7 +35,34 @@ const Navbar = () => {
     }
   }, []);
 
-  // Fetch cart from localStorage when the component mounts
+   useEffect(() => {
+    async function checkAdminStatus() {
+      try {
+        const response = await fetch('/api/admin/validate', {
+          method: 'GET',
+          credentials: 'include', // include cookies in the request
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsAdmin(data.isAdmin); 
+        } else {
+          setIsAdmin(false); 
+        }
+
+
+        const storedUserType = localStorage.getItem('userType');
+        setUserType(storedUserType || 'User');
+      } catch (err) {
+        console.error('Error checking admin status:', err);
+        setIsAdmin(false); 
+      }
+    }
+
+    checkAdminStatus();
+  }, []);
+
+  // fetch cart from localStorage when the component mounts
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(storedCart);

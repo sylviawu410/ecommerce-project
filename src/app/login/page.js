@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from './../components/Navbar.js';
+import Navbar from '../components/Navbar.js';
 import React, { useState } from 'react';
 
 const LoginPage = () => {

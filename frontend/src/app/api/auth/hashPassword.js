@@ -1,28 +1,22 @@
-import pool from '../../../../lib/db'; 
-
-
-
+import bcrypt from 'bcrypt';
 
 async function createUser(email, password, isAdmin = false) {
   try {
-    // Generate a salt and hash the password
-    const saltRounds = 10; // Number of salt rounds 
+    // if (!process.env.CREATE_TEST_USERS) {
+    //   console.log('not permitted to create account');
+    //   return;
+    // }
+
+    const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+    console.log("hashedPassword:",hashedPassword)
 
-    // Insert the user into the database
-    const [result] = await pool.execute(
-      'INSERT INTO users (email, password, is_admin) VALUES (?, ?, ?)',
-      [email, hashedPassword, isAdmin]
-    );
 
-    console.log('User created with ID:', result.insertId);
   } catch (error) {
     console.error('Error creating user:', error);
   }
 }
 
-// Example: Creating users
-(async () => {
-  await createUser('admin@example.com', 'secureAdminPass', true); // Admin user
-  await createUser('user@example.com', 'secureUserPass', false); // Normal user
-})();
+createUser('admin@email.com', 'admin410', true);
+createUser('user@email.com', 'user410', false); 
+

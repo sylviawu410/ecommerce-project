@@ -10,6 +10,8 @@ export async function fetchProducts() {
 }
 
 const Navbar = () => {
+  const [userType, setUserType] = useState('Guest');
+
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
@@ -17,6 +19,20 @@ const Navbar = () => {
   const [total, setTotal] = useState(0);
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user.isAdmin) {
+        setUserType("Admin")
+      } else if (user.isAdmin = false) {
+        setUserType("User")
+      }
+    } else {
+      setUserType('Guest');
+    }
+  }, []);
 
   // Fetch cart from localStorage when the component mounts
   useEffect(() => {
@@ -36,20 +52,20 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    async function loadProducts(){
+    async function loadProducts() {
       try {
         const data = await fetchProducts();
-        setProducts(data); 
+        setProducts(data);
         // console.log("product data: ", data)
       } catch (err) {
         console.error('Error fetching categories:', err);
-        setError(err.message); 
+        setError(err.message);
       }
     }
     loadProducts();
   }, []);
 
-  // Calculate total amount
+  //  total amount
   useEffect(() => {
     const calculateTotal = async () => {
       let totalAmount = 0;
@@ -65,7 +81,6 @@ const Navbar = () => {
     }
   }, [cart, products]);
 
-  // Update quantity
   const updateQuantity = (pid, quantity) => {
     const updatedCart = cart.map((item) =>
       item.pid === pid ? { ...item, quantity: Math.max(1, quantity) } : item
@@ -75,7 +90,6 @@ const Navbar = () => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  // Remove item from cart
   const removeItem = (pid) => {
     const updatedCart = cart.filter((item) => item.pid !== pid);
     setCart(updatedCart);
@@ -87,10 +101,16 @@ const Navbar = () => {
         <div className="icon w-3/10">IERG4210</div>
       </Link>
 
-      <Link href="/admin" className="ml-auto mr-3">
-        <div >Admin</div>
-      </Link>
+      {(userType === "Admin") ? (
+        <Link href="/admin" className="ml-auto mr-3">
+          <div >Admin Panel</div>
+        </Link>
+      ):(
+        <div className="">Welcome, {userType}</div>
+      )}
+      <div>Log out</div>
 
+    
       <div className="relative inline-block mr-5 w-6/10">
         <div>
           <button
@@ -115,7 +135,7 @@ const Navbar = () => {
                     <ul>
                       {cart.map((item) => (
                         <li key={item.pid} className="flex items-center gap-5 mb-2">
-                          <img className="shop-item" src={`/${item.image_url}`} alt='' /> 
+                          <img className="shop-item" src={`/${item.image_url}`} alt='' />
                           <div className=" w-7/10 grow">{item.name}</div>
                           <div>${item.price}</div>
                           <input

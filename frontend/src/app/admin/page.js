@@ -156,7 +156,7 @@ const AdminPage = () => {
         <div>
             <Navbar></Navbar>
             <main className='flex flex-col'>
-                <div className='text-4xl mt-7 mx-auto font-semibold'>Admin Panel</div>
+                <div className='text-4xl mt-12 mb-10 mx-auto font-semibold'>Admin Panel</div>
                 <div className=' font-medium text-lg bg-indigo-900 text-white w-full py-12 pl-8 mt-12 ml-5 '>MANAGE PRODUCTS</div>
                 <div className='flex items-baseline gap-10 justify-center flex-wrap'>
                     <form className='flex flex-col' onSubmit={handleSubmitInsertProduct}>

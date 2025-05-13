@@ -2,6 +2,7 @@
 
 import Navbar from '../components/Navbar.js';
 import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 
 
 
@@ -18,6 +19,8 @@ export async function fetchProducts() {
 }
 
 const AdminPage = () => {
+    const router = useRouter();
+
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
 
@@ -34,8 +37,32 @@ const AdminPage = () => {
 
 
 
-    const [productImage, setProductImage] = useState(null); // State for the uploaded image
+    const [productImage, setProductImage] = useState(null);
     const [imageError, setImageError] = useState("");
+
+    useEffect(() => {
+        // redirect to login if not admin
+        async function checkAdminAuth() {
+            try {
+                const response = await fetch('/api/admin/validate', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                
+                if (!response.ok) {
+                    alert("You are unauthorized to this page")
+                    router.push('/login');
+
+                }
+            } catch (error) {
+                console.error('Error checking admin authentication:', error);
+                router.push('/login');
+            }
+        }
+
+        checkAdminAuth();
+    }, [router]);
+
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];

@@ -16,7 +16,7 @@ export async function fetchProducts() {
 }
 
 export default function HomePage() {
-
+  const [displayCategory, setDisplayCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
@@ -26,7 +26,7 @@ export default function HomePage() {
     async function loadCategories() {
       try {
         const data = await fetchCategories();
-        setCategories(data); 
+        setCategories(data);
         // console.log("categories data: ", data)
       } catch (err) {
         console.error('Error fetching categories:', err);
@@ -34,20 +34,26 @@ export default function HomePage() {
       }
     }
 
-    async function loadProducts(){
+    async function loadProducts() {
       try {
         const data = await fetchProducts();
         setProducts(data);
-        console.log("product data: ", data)
+        // console.log("product data: ", data)
       } catch (err) {
         console.error('Error fetching categories:', err);
-        setError(err.message); 
+        setError(err.message);
       }
     }
 
     loadCategories();
     loadProducts();
   }, []);
+
+  const handleSpecificCategory = (catid) => {
+    setDisplayCategory(catid);
+  };
+
+
 
   return (
     <div className="main-page min-h-screen font-[family-name:var(--font-geist-sans)]">
@@ -88,10 +94,10 @@ export default function HomePage() {
             <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden"
               role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
               <div className="py-1" role="none">
-                { categories.length > 0 ? (
+                {categories.length > 0 ? (
                   <ul>
                     {categories.map((category) => (
-                      <li className='px-4 py-2 text-sm text-gray-700' key={category.catid} >{category.name}</li>
+                      <li className='px-4 py-2 text-sm text-gray-700' key={category.catid} onClick={()=>handleSpecificCategory(category.catid)} >{category.name}</li>
                     ))}
                   </ul>
                 ) : (
@@ -106,6 +112,19 @@ export default function HomePage() {
       <main>
         <div className='display'>
           {products.map((product) => (<ProductCard key={product.pid} productId={product.pid} title={product.name} price={product.price} imageUrl={product.image_url}></ProductCard>))}
+        </div>
+        <div className='mt-6 mx-auto'>By Category {displayCategory} </div>
+        <div className='display'>
+        
+          {products.filter((product) => product.catid === displayCategory).map((product) => (
+            <ProductCard
+              key={product.pid}
+              productId={product.pid}
+              title={product.name}
+              price={product.price}
+              imageUrl={product.image_url}
+            />
+          ))}
         </div>
       </main>
       <footer className="row-start-3 flex flex-wrap pt-20 items-center justify-center">

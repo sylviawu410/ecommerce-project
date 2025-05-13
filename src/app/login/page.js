@@ -23,15 +23,22 @@ const LoginPage = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                setSuccess('Login successful!');
+                // console.log("API Response (Login):", data); 
+                // localStorage.removeItem('user');
+
+                const user = data.user;
+                // console.log("user data: ", user);
+
+                localStorage.setItem('user', JSON.stringify(user));
+                // console.log("localStorage.setItem", JSON.stringify(data.user))
+
+                alert("Login successful!");
                 setError('');
 
-                localStorage.setItem('user', JSON.stringify(data.user));
-
-                if (data.user.isAdmin) {
-                    window.location.href = '/admin'; 
+                if (user.isAdmin) {
+                    window.location.href = '/admin';
                 } else {
-                    window.location.href = '/'; 
+                    window.location.href = '/';
                 }
             } else {
                 const errorData = await response.json();

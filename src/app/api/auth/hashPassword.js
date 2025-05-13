@@ -9,7 +9,10 @@ async function createUser(email, password, isAdmin = false) {
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    console.log("hashedPassword:",hashedPassword)
+    console.log("hashedPassword for " + password + ": " + hashedPassword)
+
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    console.log('Password comparison result:', isMatch);
 
 
   } catch (error) {
@@ -17,6 +20,6 @@ async function createUser(email, password, isAdmin = false) {
   }
 }
 
-createUser('admin@email.com', 'admin410', true);
-createUser('user@email.com', 'user410', false); 
+// createUser('admin@email.com', 'admin410', true);
+createUser('user@email.com', 'user000', false);
 

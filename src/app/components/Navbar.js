@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export async function fetchProducts() {
@@ -10,57 +11,163 @@ export async function fetchProducts() {
 }
 
 const Navbar = () => {
-  const [userType, setUserType] = useState('Guest');
-  const [isAdmin, setIsAdmin] = useState(false); 
 
+  //authentication related
+  const router = useRouter();
+  const [userType, setUserType] = useState('guest');
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  //UI
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
+  //shopping cart
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user.isAdmin) {
-        setUserType("Admin")
-      } else if (user.isAdmin = false) {
-        setUserType("User")
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        setUserType("guest");
+        setIsAdmin(false);
+        localStorage.removeItem('userType');
+        alert("Logged out")
+        router.push('/'); //home page
+      } else {
+        console.error('Logout failed');
       }
-    } else {
-      setUserType('Guest');
+    } catch (error) {
+      console.error('Error during logout:', error);
     }
-  }, []);
+  };
 
-   useEffect(() => {
-    async function checkAdminStatus() {
-      try {
-        const response = await fetch('/api/admin/validate', {
-          method: 'GET',
-          credentials: 'include', // include cookies in the request
-        });
+// useEffect(() => {
+//   try {
+//     const storedUser = localStorage.getItem('user');
 
-        if (response.ok) {
-          const data = await response.json();
-          setIsAdmin(data.isAdmin); 
-        } else {
-          setIsAdmin(false); 
+//     if (storedUser) {
+//       const user = JSON.parse(storedUser);
+
+//       if (  user.isAdmin === 0 ||  user.isAdmin === 1 ) {
+//         setUserType(user.isAdmin ? "admin" : "user");
+//       } else {
+//         console.warn('Invalid user object in localStorage:', user);
+//         setUserType('guest');
+//       }
+//     } else {
+//       setUserType('guest');
+//     }
+//   } catch (error) {
+//     console.error('Error parsing user from localStorage:', error);
+//     setUserType('guest'); 
+//   }
+// }, []);
+
+//   useEffect(() => {
+//     async function checkAdminStatus() {
+//       const cookies = document.cookie;
+//       const hasAuthToken = cookies.includes('authToken=');
+
+//       if (!hasAuthToken) {
+//         setIsAdmin(false);
+
+//         setUserType('guest');
+//         return;
+//       }
+//       try {
+//         const response = await fetch('/api/admin/validate', {
+//           method: 'GET',
+//           credentials: 'include',
+//         });
+
+//         if (response.ok) {
+//           const data = await response.json();
+//           setIsAdmin(data.isAdmin);
+//           setUserType(data.isAdmin ? 'admin' : 'user');
+//         } else {
+//           setIsAdmin(false);
+//           setUserType('user');
+//         }
+
+//       } catch (err) {
+//         console.error('Error checking admin status:', err);
+//         setIsAdmin(false);
+//         setUserType('guest');
+
+//       }
+//     }
+
+//     checkAdminStatus();
+//   }, []);
+
+useEffect(() => {
+  async function checkAdminStatus() {
+    try {
+      // Check if the user is already stored in localStorage
+      const storedUser = localStorage.getItem('user');
+
+      const cookies = document.cookie;
+      const hasAuthToken = cookies.includes('authToken=');
+
+      if (!hasAuthToken) {
+        console.log("No auth token found, setting userType to guest");
+        setIsAdmin(false);
+        setUserType('guest');
+        if (storedUser) {
+        const user = JSON.parse(storedUser);
+        // console.log("User from localStorage:", user);
+        setUserType(user.isAdmin ? 'admin' : 'user');
+        if(user.isAdmin){
+          setIsAdmin(user.isAdmin); 
         }
-
-
-        const storedUserType = localStorage.getItem('userType');
-        setUserType(storedUserType || 'User');
-      } catch (err) {
-        console.error('Error checking admin status:', err);
-        setIsAdmin(false); 
+        
+      } else {
+        setUserType('guest'); 
       }
-    }
+        return;
+      }
 
-    checkAdminStatus();
-  }, []);
+      // Validate the auth token with the server
+      const response = await fetch('/api/admin/validate', {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Admin validation response:", data);
+
+        setIsAdmin(data.isAdmin);
+        setUserType(data.isAdmin ? 'admin' : 'user');
+
+        const updatedUser = {
+          id: data.id || null, 
+          email: data.email || null, 
+          isAdmin: data.isAdmin,
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      } else {
+        console.log("Token validation failed, setting userType to user");
+        setIsAdmin(false);
+        setUserType('user');
+      }
+    } catch (err) {
+      console.error('Error checking admin status:', err);
+      setIsAdmin(false);
+      setUserType('guest');
+    }
+  }
+
+  checkAdminStatus();
+}, []);
 
   // fetch cart from localStorage when the component mounts
   useEffect(() => {
@@ -124,21 +231,29 @@ const Navbar = () => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
   return (
-    <nav className="w-full navbar">
+    <nav className="w-full navbar gap-3">
       <Link href='/'>
         <div className="icon w-3/10">IERG4210</div>
       </Link>
 
-      {(userType === "Admin") ? (
+      {(isAdmin) ? (
         <Link href="/admin" className="ml-auto mr-3">
           <div >Admin Panel</div>
         </Link>
-      ):(
-        <div className="">Welcome, {userType}</div>
+      ) : (
+        <div className="ml-auto ">Welcome, {userType}</div>
       )}
-      <div>Log out</div>
 
-    
+      {(userType === "admin" || userType === "user") ? (
+        <div onClick={handleLogout} className="cursor-pointer">Log out</div>) : (
+        <Link href="/login" >
+          <div >Login</div>
+        </Link>
+      )
+      }
+
+
+
       <div className="relative inline-block mr-5 w-6/10">
         <div>
           <button
@@ -168,7 +283,7 @@ const Navbar = () => {
                           <div>${item.price}</div>
                           <input
                             type="number"
-                            min="1"
+                            min="0"
                             value={item.quantity}
                             onChange={(e) => updateQuantity(item.pid, parseInt(e.target.value))}
                             className="w-[30px] mx-5 py-1 text-base text-gray-900 placeholder:text-gray-400 sm:text-sm/6 outline-gray-200"

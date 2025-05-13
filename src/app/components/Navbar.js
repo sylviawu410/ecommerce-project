@@ -49,64 +49,6 @@ const Navbar = () => {
     }
   };
 
-// useEffect(() => {
-//   try {
-//     const storedUser = localStorage.getItem('user');
-
-//     if (storedUser) {
-//       const user = JSON.parse(storedUser);
-
-//       if (  user.isAdmin === 0 ||  user.isAdmin === 1 ) {
-//         setUserType(user.isAdmin ? "admin" : "user");
-//       } else {
-//         console.warn('Invalid user object in localStorage:', user);
-//         setUserType('guest');
-//       }
-//     } else {
-//       setUserType('guest');
-//     }
-//   } catch (error) {
-//     console.error('Error parsing user from localStorage:', error);
-//     setUserType('guest'); 
-//   }
-// }, []);
-
-//   useEffect(() => {
-//     async function checkAdminStatus() {
-//       const cookies = document.cookie;
-//       const hasAuthToken = cookies.includes('authToken=');
-
-//       if (!hasAuthToken) {
-//         setIsAdmin(false);
-
-//         setUserType('guest');
-//         return;
-//       }
-//       try {
-//         const response = await fetch('/api/admin/validate', {
-//           method: 'GET',
-//           credentials: 'include',
-//         });
-
-//         if (response.ok) {
-//           const data = await response.json();
-//           setIsAdmin(data.isAdmin);
-//           setUserType(data.isAdmin ? 'admin' : 'user');
-//         } else {
-//           setIsAdmin(false);
-//           setUserType('user');
-//         }
-
-//       } catch (err) {
-//         console.error('Error checking admin status:', err);
-//         setIsAdmin(false);
-//         setUserType('guest');
-
-//       }
-//     }
-
-//     checkAdminStatus();
-//   }, []);
 
 useEffect(() => {
   async function checkAdminStatus() {
@@ -118,7 +60,7 @@ useEffect(() => {
       const hasAuthToken = cookies.includes('authToken=');
 
       if (!hasAuthToken) {
-        console.log("No auth token found, setting userType to guest");
+        // console.log("No auth token found, setting userType to guest");
         setIsAdmin(false);
         setUserType('guest');
         if (storedUser) {
